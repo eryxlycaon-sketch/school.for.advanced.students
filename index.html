@@ -3,420 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Jersey Store - Glassmorphism</title>
+    <title>JerseyPro - Premium Football Jerseys</title>
+    
+    <!-- 🔥 Phase 7: PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3159/3159614.png">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="JerseyPro is your ultimate destination for premium football jerseys in Bangladesh.">
+    
+    <link rel="dns-prefetch" href="https://firestore.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
-        html { scroll-behavior: smooth; }
-        body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            background-attachment: fixed;
-        }
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-        .glass-header {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .glass-input {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        .glass-input:focus {
-            outline: none;
-            border-color: #60a5fa;
-            box-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
-        }
-        .fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        html { scroll-behavior: smooth; padding-bottom: env(safe-area-inset-bottom); }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); background-attachment: fixed; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+        .glass-header { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-input { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); color: white; width: 100%; padding: 0.75rem; border-radius: 0.5rem; outline: none; transition: all 0.3s; }
+        .glass-input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(96, 165, 250, 0.3); }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .hidden-section { display: none !important; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+        .skeleton { animation: skeleton-loading 1s linear infinite alternate; }
+        @keyframes skeleton-loading { 0% { background-color: rgba(255,255,255,0.05); } 100% { background-color: rgba(255,255,255,0.15); } }
     </style>
 </head>
-<body class="text-gray-200 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
+<body class="text-gray-200 font-sans min-h-screen flex flex-col relative overflow-x-hidden pb-16 md:pb-0">
 
-    <div class="fixed top-0 left-0 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 -z-10 animate-blob"></div>
-    <div class="fixed top-40 right-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 -z-10 animate-blob animation-delay-2000"></div>
+    <div class="fixed top-0 left-0 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 -z-10 pointer-events-none"></div>
+    <div class="fixed top-40 right-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 -z-10 pointer-events-none"></div>
 
     <nav class="glass-header sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('home-section')">
-                    <div class="bg-gradient-to-r from-blue-400 to-purple-500 p-2 rounded-lg text-white">
-                        <i class="fa-solid fa-shirt text-xl"></i>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-20 items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('home-section')">
+                <div class="bg-gradient-to-r from-blue-400 to-purple-500 p-2 rounded-lg text-white"><i class="fa-solid fa-shirt text-xl"></i></div>
+                <span class="font-bold text-2xl text-white tracking-widest">JERSEY<span class="text-blue-400">PRO</span></span>
+            </div>
+            <div class="flex items-center space-x-6 hidden md:flex">
+                <button onclick="showSection('wishlist-section')" class="relative hover:text-pink-400 transition group">
+                    <i class="fa-solid fa-heart text-2xl"></i><span id="wishlist-count-desktop" class="absolute -top-2 -right-2 bg-pink-500 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button onclick="toggleCart()" class="relative hover:text-blue-400 transition group">
+                    <i class="fa-solid fa-cart-shopping text-2xl"></i><span id="cart-count-desktop" class="absolute -top-2 -right-2 bg-blue-500 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button id="login-btn" class="glass hover:bg-white/10 px-5 py-2 rounded-full font-semibold transition text-white border border-white/20">Login</button>
+                <div class="relative group hidden" id="user-menu">
+                    <img id="user-avatar" src="" loading="lazy" class="h-10 w-10 rounded-full border-2 border-blue-400 cursor-pointer object-cover">
+                    <div class="absolute right-0 mt-2 w-48 glass rounded-xl shadow-lg hidden group-hover:block border border-white/10 overflow-hidden">
+                        <button onclick="showSection('admin-section')" id="admin-nav-btn" class="w-full text-left px-4 py-3 hover:bg-white/10 text-yellow-300 font-semibold hidden"><i class="fa-solid fa-user-shield mr-2"></i> Dashboard</button>
+                        <button id="logout-btn" class="w-full text-left px-4 py-3 hover:bg-red-500/20 text-red-300 font-semibold"><i class="fa-solid fa-right-from-bracket mr-2"></i> Logout</button>
                     </div>
-                    <span class="font-bold text-2xl tracking-wider text-white">JERSEY<span class="text-blue-400">PRO</span></span>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <button onclick="showSection('home-section')" class="hover:text-blue-400 transition font-medium hidden sm:block">Home</button>
-                    <button onclick="toggleCart()" class="relative hover:text-blue-400 transition group">
-                        <i class="fa-solid fa-cart-shopping text-2xl"></i>
-                        <span id="cart-count" class="absolute -top-2 -right-2 bg-gradient-to-r from-pink-500 to-red-500 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center shadow-lg group-hover:scale-110 transition">0</span>
-                    </button>
-                    <button id="login-btn" class="glass hover:bg-white/10 px-5 py-2 rounded-full font-semibold transition text-white border border-white/20">Login</button>
-                    <button id="logout-btn" class="glass hover:bg-red-500/20 text-red-300 px-5 py-2 rounded-full font-semibold transition hidden border border-red-500/30">Logout</button>
-                    <button id="admin-nav-btn" onclick="showSection('admin-section')" class="glass hover:bg-yellow-500/20 text-yellow-300 px-4 py-2 rounded-full font-semibold hidden border border-yellow-500/30">
-                        <i class="fa-solid fa-user-shield"></i> My Dashboard
-                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- Phase 7: Floating Live Chat (WhatsApp) -->
+    <a href="https://wa.me/8801940762716" target="_blank" class="fixed bottom-20 md:bottom-8 right-4 md:right-8 bg-green-500 text-white p-4 rounded-full shadow-[0_4px_15px_rgba(34,197,94,0.5)] hover:scale-110 hover:bg-green-600 transition-all z-40 flex items-center justify-center">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <div class="md:hidden fixed bottom-0 left-0 w-full glass-header z-50 flex justify-around items-center p-3 border-t border-white/10">
+        <button onclick="showSection('home-section')" class="flex flex-col items-center text-gray-400 hover:text-blue-400"><i class="fa-solid fa-house text-xl mb-1"></i><span class="text-[10px]">Home</span></button>
+        <button onclick="showSection('wishlist-section')" class="relative flex flex-col items-center text-gray-400 hover:text-pink-400">
+            <i class="fa-solid fa-heart text-xl mb-1"></i><span class="text-[10px]">Wishlist</span><span id="wishlist-count-mobile" class="absolute -top-1 -right-2 bg-pink-500 text-[9px] text-white rounded-full h-4 w-4 flex items-center justify-center">0</span>
+        </button>
+        <button onclick="toggleCart()" class="relative flex flex-col items-center text-gray-400 hover:text-blue-400">
+            <i class="fa-solid fa-cart-shopping text-xl mb-1"></i><span class="text-[10px]">Cart</span><span id="cart-count-mobile" class="absolute -top-1 -right-2 bg-blue-500 text-[9px] text-white rounded-full h-4 w-4 flex items-center justify-center">0</span>
+        </button>
+        <button id="mobile-login-btn" class="flex flex-col items-center text-gray-400 hover:text-white"><i class="fa-solid fa-user text-xl mb-1"></i><span class="text-[10px]" id="mobile-user-text">Login</span></button>
+    </div>
+
     <main class="flex-grow z-10">
+        <!-- Home -->
         <section id="home-section" class="fade-in">
-            <div class="py-24 text-center px-4">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 drop-shadow-sm">Wear Your Passion</h1>
-                <p class="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl mx-auto">Premium quality jerseys for true fans. Gear up for the next match with our exclusive collections.</p>
-                <a href="#products" class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 px-10 rounded-full transition shadow-[0_0_20px_rgba(96,165,250,0.4)] hover:shadow-[0_0_30px_rgba(96,165,250,0.6)]">
-                    Explore Collection
-                </a>
+            <!-- Phase 7: Flash Sale Countdown Banner -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8" data-aos="fade-down">
+                <div class="glass p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center bg-gradient-to-r from-red-900/40 to-pink-900/40 border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                    <div class="text-center md:text-left mb-4 md:mb-0">
+                        <h3 class="text-2xl font-bold text-white"><i class="fa-solid fa-bolt text-yellow-400 mr-2"></i> FLASH SALE!</h3>
+                        <p class="text-sm text-gray-300">Use code <span class="bg-white/20 px-2 py-1 rounded text-white font-bold">SAVE10</span> for 10% off!</p>
+                    </div>
+                    <div class="flex gap-3 text-center">
+                        <div class="bg-black/50 p-2 rounded-lg min-w-[60px] border border-white/10"><p id="cd-hours" class="text-2xl font-bold text-red-400">00</p><p class="text-[10px] text-gray-400 uppercase">Hours</p></div>
+                        <div class="bg-black/50 p-2 rounded-lg min-w-[60px] border border-white/10"><p id="cd-minutes" class="text-2xl font-bold text-red-400">00</p><p class="text-[10px] text-gray-400 uppercase">Mins</p></div>
+                        <div class="bg-black/50 p-2 rounded-lg min-w-[60px] border border-white/10"><p id="cd-seconds" class="text-2xl font-bold text-red-400">00</p><p class="text-[10px] text-gray-400 uppercase">Secs</p></div>
+                    </div>
+                </div>
             </div>
 
-            <div id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mb-20">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white inline-block">Latest Arrivals</h2>
-                    <div class="h-1 w-24 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+            <div class="relative py-12 md:py-20 text-center px-4 overflow-hidden" data-aos="fade-up" data-aos-duration="800">
+                <h1 class="text-4xl md:text-7xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 drop-shadow-lg">Gear Up For Victory</h1>
+                <p class="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">Premium quality club & national jerseys. Wear your pride.</p>
+            </div>
+            
+            <div id="products-area" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+                <div class="glass p-4 rounded-2xl mb-8 flex flex-col md:flex-row gap-4 items-center">
+                    <div class="relative flex-1 w-full"><i class="fa-solid fa-search absolute left-4 top-4 text-gray-400"></i><input type="text" id="search-bar" placeholder="Search team, league..." class="glass-input pl-12 w-full"></div>
+                    <select id="filter-category" class="glass-input md:w-48 !bg-[#0f172a]"><option value="All">All Categories</option><option value="Club">Club Teams</option><option value="National">National Teams</option></select>
                 </div>
                 
                 <div id="product-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="col-span-full text-center py-20">
-                        <i class="fa-solid fa-spinner fa-spin text-4xl text-blue-400 mb-4"></i>
-                        <p class="text-gray-400">Loading premium collections...</p>
-                    </div>
+                    <!-- Skeletons -->
+                    <div class="glass p-4 rounded-2xl"><div class="skeleton h-48 rounded-xl mb-4"></div><div class="skeleton h-6 w-3/4 mb-2 rounded"></div><div class="skeleton h-8 w-1/2 rounded"></div></div>
+                    <div class="glass p-4 rounded-2xl"><div class="skeleton h-48 rounded-xl mb-4"></div><div class="skeleton h-6 w-3/4 mb-2 rounded"></div><div class="skeleton h-8 w-1/2 rounded"></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- User Dashboard Section -->
-        <section id="admin-section" class="max-w-7xl mx-auto px-4 py-12 hidden-section fade-in mb-20">
-            <div class="flex items-center justify-between mb-8">
-                <div class="flex items-center gap-4">
-                    <img id="user-avatar" src="" class="h-12 w-12 rounded-full border-2 border-blue-400 hidden">
-                    <div>
-                        <h2 class="text-3xl font-bold text-white">My Dashboard</h2>
-                        <p id="user-email" class="text-sm text-gray-400"></p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="glass p-8 rounded-2xl lg:col-span-1">
-                    <h3 class="text-xl font-bold mb-6 text-white border-b border-white/10 pb-3">Add/Edit My Jersey</h3>
-                    <form id="product-form" class="space-y-5">
-                        <input type="hidden" id="edit-id">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Jersey Name</label>
-                            <input type="text" id="p-name" class="glass-input w-full rounded-lg p-3" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Price (৳)</label>
-                            <input type="number" id="p-price" class="glass-input w-full rounded-lg p-3" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Image URL</label>
-                            <input type="url" id="p-image" placeholder="https://..." class="glass-input w-full rounded-lg p-3" required>
-                        </div>
-                        <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold py-3 px-4 rounded-lg transition shadow-lg mt-4">Save Product</button>
-                    </form>
-                </div>
+        <!-- Wishlist -->
+        <section id="wishlist-section" class="max-w-7xl mx-auto px-4 py-12 hidden-section fade-in mb-20">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-white/10 pb-4"><i class="fa-solid fa-heart text-pink-500 mr-2"></i> My Wishlist</h2>
+            <div id="wishlist-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+        </section>
 
-                <div class="glass p-8 rounded-2xl lg:col-span-2 overflow-x-auto">
-                    <h3 class="text-xl font-bold mb-6 text-white border-b border-white/10 pb-3">Manage My Products</h3>
-                    <table class="min-w-full text-left border-collapse">
-                        <thead>
-                            <tr class="text-gray-400 uppercase text-xs tracking-wider border-b border-white/10">
-                                <th class="pb-3 pl-2">Image</th>
-                                <th class="pb-3">Name</th>
-                                <th class="pb-3">Price</th>
-                                <th class="pb-3 text-right pr-2">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-product-list" class="divide-y divide-white/5">
-                            <!-- Admin list injected here -->
-                        </tbody>
-                    </table>
+        <!-- Admin -->
+        <section id="admin-section" class="max-w-7xl mx-auto px-4 py-12 hidden-section fade-in mb-20">
+            <!-- (Admin HTML structure remains exactly the same as Phase 6) -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-white/10 pb-4 gap-4">
+                <h2 class="text-3xl font-bold text-white"><i class="fa-solid fa-chess-king text-yellow-400 mr-2"></i> Dashboard</h2>
+                <div class="flex gap-2 bg-black/30 p-1 rounded-xl border border-white/10 w-full md:w-auto overflow-x-auto">
+                    <button onclick="switchAdminTab('dashboard')" id="tab-dashboard" class="admin-tab bg-blue-600 px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap">Overview</button>
+                    <button onclick="switchAdminTab('products')" id="tab-products" class="admin-tab hover:bg-white/10 px-4 py-2 rounded-lg font-bold text-sm text-gray-400 whitespace-nowrap">Products</button>
+                    <button onclick="switchAdminTab('orders')" id="tab-orders" class="admin-tab hover:bg-white/10 px-4 py-2 rounded-lg font-bold text-sm text-gray-400 whitespace-nowrap">Orders</button>
                 </div>
             </div>
+
+            <div id="admin-dashboard" class="admin-content fade-in">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+                    <div class="glass p-6 rounded-2xl border-l-4 border-blue-500"><p class="text-gray-400 text-xs md:text-sm font-bold uppercase mb-1">Revenue</p><h3 class="text-2xl md:text-3xl font-bold text-white" id="stat-revenue">৳0</h3></div>
+                    <div class="glass p-6 rounded-2xl border-l-4 border-purple-500"><p class="text-gray-400 text-xs md:text-sm font-bold uppercase mb-1">Orders</p><h3 class="text-2xl md:text-3xl font-bold text-white" id="stat-orders">0</h3></div>
+                    <div class="glass p-6 rounded-2xl border-l-4 border-yellow-500"><p class="text-gray-400 text-xs md:text-sm font-bold uppercase mb-1">Pending</p><h3 class="text-2xl md:text-3xl font-bold text-white" id="stat-pending">0</h3></div>
+                    <div class="glass p-6 rounded-2xl border-l-4 border-green-500"><p class="text-gray-400 text-xs md:text-sm font-bold uppercase mb-1">Products</p><h3 class="text-2xl md:text-3xl font-bold text-white" id="stat-products">0</h3></div>
+                </div>
+            </div>
+
+            <div id="admin-products" class="admin-content hidden-section fade-in">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="glass p-6 rounded-2xl lg:col-span-1 h-fit">
+                        <h3 class="text-xl font-bold mb-4 text-white border-b border-white/10 pb-2">Add Product</h3>
+                        <form id="product-form" class="space-y-4">
+                            <input type="hidden" id="edit-id">
+                            <div><label class="text-xs text-gray-400">Name</label><input type="text" id="p-name" class="glass-input" required></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="text-xs text-gray-400">Category</label><select id="p-category" class="glass-input !bg-gray-800"><option>Club</option><option>National</option></select></div>
+                                <div><label class="text-xs text-gray-400">Stock Qty</label><input type="number" id="p-stock" class="glass-input" value="10" required></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="text-xs text-gray-400">Price (৳)</label><input type="number" id="p-price" class="glass-input" required></div>
+                                <div><label class="text-xs text-gray-400">Discount (৳)</label><input type="number" id="p-discount" class="glass-input" value="0"></div>
+                            </div>
+                            <div><label class="text-xs text-gray-400">Image URL</label><input type="url" id="p-image" class="glass-input" required></div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition">Save Product</button>
+                        </form>
+                    </div>
+                    <div class="glass p-6 rounded-2xl lg:col-span-2 overflow-x-auto"><table class="min-w-full text-left"><tbody id="admin-product-list" class="divide-y divide-white/5"></tbody></table></div>
+                </div>
+            </div>
+
+            <div id="admin-orders" class="admin-content hidden-section fade-in"><div class="glass p-6 rounded-2xl overflow-x-auto"><table class="min-w-full text-left text-sm"><tbody id="admin-order-list" class="divide-y divide-white/5"></tbody></table></div></div>
         </section>
     </main>
 
-    <div id="cart-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden justify-end">
-        <div class="glass w-full max-w-md h-full flex flex-col fade-in border-l border-white/10 !bg-[#0f172a]/90">
-            <div class="flex justify-between items-center p-6 border-b border-white/10">
-                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                    <i class="fa-solid fa-bag-shopping text-blue-400"></i> Your Cart
-                </h2>
-                <button onclick="toggleCart()" class="text-gray-400 hover:text-white text-3xl transition">&times;</button>
-            </div>
-            
-            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-            
-            <div class="border-t border-white/10 p-6 glass">
-                <div class="flex justify-between text-xl font-bold mb-6 text-white">
-                    <span>Total:</span>
-                    <span id="cart-total" class="text-blue-400">৳0</span>
-                </div>
-                <button class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 rounded-xl transition shadow-lg">Proceed to Checkout</button>
-            </div>
-        </div>
-    </div>
-
-    <footer class="glass border-t border-white/10 py-10 mt-auto z-10">
-        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center text-center md:text-left">
+    <footer class="glass-header mt-auto border-t border-white/10 pb-16 md:pb-0">
+        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
             <div>
-                <h3 class="text-2xl font-bold text-white mb-4">Contact Us</h3>
-                <div class="flex flex-col gap-2">
-                    <a href="https://wa.me/8801940762716" class="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-green-400 transition group">
-                        <i class="fa-brands fa-whatsapp text-green-500 text-xl group-hover:scale-110 transition"></i> 01940762716
-                    </a>
-                    <a href="https://wa.me/8801780852852" class="flex items-center justify-center md:justify-start gap-2 text-gray-300 hover:text-green-400 transition group">
-                        <i class="fa-brands fa-whatsapp text-green-500 text-xl group-hover:scale-110 transition"></i> 01780852852
-                    </a>
-                </div>
-                <p class="mt-4 text-sm text-gray-400">Premium jerseys delivered all over Bangladesh.</p>
+                <span class="font-bold text-2xl text-white tracking-widest mb-4 block">JERSEY<span class="text-blue-400">PRO</span></span>
+                <p class="text-gray-400 text-sm mb-4">Premium football jerseys for passionate fans across Bangladesh.</p>
             </div>
-            <div class="md:text-right">
-                <p class="text-gray-400 mb-2">Designed & Developed by</p>
-                <a href="https://www.facebook.com/hasan.mhr.09" target="_blank" class="glass inline-flex items-center gap-3 px-5 py-2 rounded-full hover:bg-white/10 text-white transition border border-white/20">
-                    <span class="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-200">Mehedi hasan</span> 
-                    <i class="fa-brands fa-facebook text-blue-500 text-xl"></i>
-                </a>
-                <p class="text-xs mt-6 text-gray-500">&copy; 2026 JerseyPro. All rights reserved.</p>
+            <div>
+                <h4 class="text-white font-bold mb-4">Contact Us</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><i class="fa-solid fa-phone text-blue-400 mr-2"></i>+880 1940762716</li>
+                    <li><i class="fa-solid fa-phone text-blue-400 mr-2"></i>+880 1780852852</li>
+                </ul>
             </div>
+            <div><p class="text-xs mt-6 text-gray-500">&copy; 2026 JerseyPro. Developed by <a href="https://www.facebook.com/hasan.mhr.09" target="_blank" class="text-blue-400 font-bold hover:underline">Mehedi Hasan</a>.</p></div>
         </div>
     </footer>
 
+    <!-- Modals -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[80] hidden justify-end"><div class="glass w-full max-w-md h-full flex flex-col fade-in !bg-[#0f172a]/95 border-l border-white/10"><div class="flex justify-between items-center p-6 border-b border-white/10"><h2 class="text-2xl font-bold text-white">Cart</h2><button onclick="toggleCart()" class="text-gray-400 hover:text-white text-3xl">&times;</button></div><div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div><div class="border-t border-white/10 p-6"><div class="flex justify-between text-xl font-bold mb-4 text-white"><span>Total:</span><span id="cart-total" class="text-blue-400">৳0</span></div><button onclick="openCheckout()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg">Checkout</button></div></div></div>
+    
+    <div id="checkout-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[90] hidden justify-center items-center p-4">
+        <div class="glass w-full max-w-lg rounded-2xl p-6 fade-in relative !bg-[#0f172a]">
+            <button onclick="closeCheckout()" class="absolute top-4 right-6 text-gray-400 hover:text-white text-3xl">&times;</button>
+            <h2 class="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">Checkout Securely</h2>
+            
+            <!-- Phase 7: Coupon Form inside Checkout -->
+            <div class="flex gap-2 mb-4 border-b border-white/10 pb-4">
+                <input type="text" id="coupon-code" placeholder="Promo Code (e.g. SAVE10)" class="glass-input flex-1 uppercase">
+                <button type="button" onclick="applyCoupon()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 rounded-lg font-bold transition">Apply</button>
+            </div>
+
+            <form id="checkout-form" class="space-y-3">
+                <div><label class="text-xs text-gray-300">Name</label><input type="text" id="c-name" class="glass-input" required></div>
+                <div><label class="text-xs text-gray-300">Phone</label><input type="tel" id="c-phone" class="glass-input" required></div>
+                <div><label class="text-xs text-gray-300">Address</label><textarea id="c-address" class="glass-input" rows="2" required></textarea></div>
+                <div><label class="text-xs text-gray-300 mb-1 block">Payment</label><select id="c-payment" class="glass-input !bg-gray-800"><option>Cash on Delivery</option><option>bKash</option><option>Nagad</option></select></div>
+                
+                <div id="discount-row" class="hidden flex justify-between text-green-400 text-sm mt-2 font-bold"><span>Discount Applied:</span><span id="discount-amt">-৳0</span></div>
+                <div class="pt-2 flex justify-between font-bold text-lg"><span>Grand Total:</span><span id="checkout-total" class="text-blue-400">৳0</span></div>
+                
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl mt-2">Confirm Order</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="quickview-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[90] hidden justify-center items-center p-4"><div class="glass w-full max-w-4xl rounded-2xl p-6 fade-in relative !bg-[#0f172a] grid md:grid-cols-2 gap-8"><button onclick="closeQuickView()" class="absolute top-4 right-6 text-gray-400 hover:text-white text-3xl z-10">&times;</button><div class="overflow-hidden rounded-xl h-80 md:h-full"><img id="qv-img" src="" loading="lazy" class="w-full h-full object-cover"></div><div class="flex flex-col justify-center"><span id="qv-category" class="text-sm text-blue-400 font-bold uppercase mb-2"></span><h2 id="qv-name" class="text-3xl font-bold text-white mb-2"></h2><div class="flex items-center gap-4 mb-4" id="qv-price-container"></div><p id="qv-stock" class="text-sm mb-6"></p><div id="qv-action"></div></div></div></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+        import { initializeFirestore, persistentLocalCache, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyD50mqHMAFIUSDcf4HCxq3MLfVQvD3gCSo",
-            authDomain: "jersy-f60dd.firebaseapp.com",
-            projectId: "jersy-f60dd",
-            storageBucket: "jersy-f60dd.firebasestorage.app",
-            messagingSenderId: "819284275287",
-            appId: "1:819284275287:web:6b160c163728d25db07312"
+        // Phase 7: PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('PWA SW Registered', reg))
+                .catch(err => console.log('SW Reg Failed', err));
+            });
+        }
+
+        AOS.init({ once: true, offset: 50 });
+
+        window.showToast = (msg, type = "success") => {
+            const bg = type === "success" ? "linear-gradient(to right, #00b09b, #96c93d)" : "linear-gradient(to right, #ef4444, #f87171)";
+            Toastify({ text: msg, duration: 2500, gravity: "bottom", position: "right", style: { background: bg, borderRadius: "10px", fontWeight: "bold" } }).showToast();
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+        const firebaseConfig = { apiKey: "AIzaSyD50mqHMAFIUSDcf4HCxq3MLfVQvD3gCSo", authDomain: "jersy-f60dd.firebaseapp.com", projectId: "jersy-f60dd", storageBucket: "jersy-f60dd.firebasestorage.app", messagingSenderId: "819284275287", appId: "1:819284275287:web:6b160c163728d25db07312" };
+        const app = initializeApp(firebaseConfig); 
+        const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+        const auth = getAuth(app); const provider = new GoogleAuthProvider();
 
-        let cart = [];
-        let currentUser = null; 
-        let allProducts = []; 
+        let allProducts = [], allOrders = [], cart = JSON.parse(localStorage.getItem('jerseyCart')) || [], wishlist = JSON.parse(localStorage.getItem('jerseyWishlist')) || [];
+        let currentUser = null, isAdmin = false;
         
-        window.showSection = (sectionId) => {
-            document.getElementById('home-section').classList.add('hidden-section');
-            document.getElementById('admin-section').classList.add('hidden-section');
-            document.getElementById(sectionId).classList.remove('hidden-section');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Phase 7: Flash Sale Countdown Logic
+        const flashSaleEnd = new Date().getTime() + (5 * 60 * 60 * 1000); // Ends in 5 hours
+        setInterval(() => {
+            const now = new Date().getTime(); const distance = flashSaleEnd - now;
+            if (distance > 0) {
+                document.getElementById("cd-hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById("cd-minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById("cd-seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        }, 1000);
+
+        // Phase 7: Coupon Logic
+        let discountApplied = 0;
+        window.applyCoupon = () => {
+            const code = document.getElementById('coupon-code').value.toUpperCase();
+            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            if(subtotal === 0) return showToast("Your cart is empty", "error");
+
+            if(code === 'SAVE10') discountApplied = Math.floor(subtotal * 0.10);
+            else if(code === 'WELCOME' || code === 'BD50') discountApplied = 50;
+            else { discountApplied = 0; updateCartUI(); return showToast("Invalid Promo Code", "error"); }
+
+            document.getElementById('discount-row').classList.remove('hidden');
+            document.getElementById('discount-amt').innerText = `-৳${discountApplied}`;
+            showToast("Coupon Applied Successfully!");
+            updateCartUI();
+        };
+
+        window.showSection = (id) => { 
+            ['home-section', 'admin-section', 'wishlist-section'].forEach(sec => document.getElementById(sec).classList.add('hidden-section'));
+            document.getElementById(id).classList.remove('hidden-section'); 
+            if(id === 'wishlist-section') renderWishlist(); window.scrollTo(0,0); 
+        };
+        window.switchAdminTab = (tab) => {
+            document.querySelectorAll('.admin-content').forEach(el => el.classList.add('hidden-section'));
+            document.querySelectorAll('.admin-tab').forEach(el => { el.classList.remove('bg-blue-600', 'text-white'); el.classList.add('text-gray-400'); });
+            document.getElementById(`admin-${tab}`).classList.remove('hidden-section');
+            document.getElementById(`tab-${tab}`).classList.add('bg-blue-600', 'text-white'); document.getElementById(`tab-${tab}`).classList.remove('text-gray-400');
+        };
+        window.toggleCart = () => { document.getElementById('cart-modal').classList.toggle('hidden'); document.getElementById('cart-modal').classList.toggle('flex'); };
+        window.openCheckout = () => { if(cart.length===0||!currentUser) return showToast(currentUser?"Cart is empty!":"Please login to checkout", "error"); document.getElementById('checkout-modal').classList.remove('hidden'); document.getElementById('checkout-modal').classList.add('flex'); toggleCart(); };
+        window.closeCheckout = () => { document.getElementById('checkout-modal').classList.add('hidden'); document.getElementById('checkout-modal').classList.remove('flex'); };
+        
+        window.openQuickView = (id) => {
+            const p = allProducts.find(x => x.id === id); if(!p) return;
+            document.getElementById('qv-img').src = p.image; document.getElementById('qv-category').innerText = p.category || 'Premium'; document.getElementById('qv-name').innerText = p.name;
+            const finalP = p.discount > 0 ? (p.price - p.discount) : p.price;
+            document.getElementById('qv-price-container').innerHTML = p.discount > 0 ? `<p class="text-2xl font-extrabold text-blue-400">৳${finalP}</p><p class="text-lg text-gray-500 line-through">৳${p.price}</p>` : `<p class="text-2xl font-extrabold text-blue-400">৳${p.price}</p>`;
+            document.getElementById('qv-stock').innerHTML = p.stock > 0 ? `<span class="text-green-400"><i class="fa-solid fa-check-circle"></i> In Stock</span>` : `<span class="text-red-400">Out of Stock</span>`;
+            document.getElementById('qv-action').innerHTML = p.stock > 0 ? `<button onclick="addToCart(event, '${p.id}', '${p.name.replace(/'/g, "\\'")}', ${finalP}, '${p.image}'); closeQuickView();" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold">Add to Cart</button>` : `<button disabled class="w-full bg-gray-700 text-gray-400 py-3 rounded-lg font-bold">Sold Out</button>`;
+            document.getElementById('quickview-modal').classList.remove('hidden'); document.getElementById('quickview-modal').classList.add('flex');
+        };
+        window.closeQuickView = () => { document.getElementById('quickview-modal').classList.add('hidden'); document.getElementById('quickview-modal').classList.remove('flex'); };
+
+        window.toggleWishlist = (e, id) => { 
+            e.stopPropagation(); 
+            if(wishlist.includes(id)) { wishlist = wishlist.filter(x=>x!==id); showToast("Removed", "error"); }
+            else { wishlist.push(id); showToast("Added to wishlist", "success"); }
+            localStorage.setItem('jerseyWishlist', JSON.stringify(wishlist)); updateCounts(); renderProducts(getFilteredProducts()); 
+        };
+        function renderWishlist() {
+            const c = document.getElementById('wishlist-container'); const w = allProducts.filter(p => wishlist.includes(p.id));
+            if(w.length === 0) return c.innerHTML = '<p class="col-span-full text-center text-gray-500 mt-10">Wishlist empty.</p>';
+            c.innerHTML = ''; w.forEach(p => { const finalP = p.discount>0?(p.price-p.discount):p.price; c.innerHTML += `<div class="glass rounded-2xl overflow-hidden flex flex-col relative" data-aos="zoom-in"><button onclick="toggleWishlist(event, '${p.id}')" class="absolute top-3 right-3 z-20 text-pink-500 bg-white/10 p-2 rounded-full"><i class="fa-solid fa-heart"></i></button><img src="${p.image}" loading="lazy" class="h-64 object-cover cursor-pointer" onclick="openQuickView('${p.id}')"><div class="p-5 flex-1 flex flex-col justify-between"><div><h3 class="text-xl font-bold text-white">${p.name}</h3><p class="text-blue-400 font-extrabold text-2xl">৳${finalP}</p></div><button onclick="addToCart(event, '${p.id}', '${p.name.replace(/'/g, "\\'")}', ${finalP}, '${p.image}')" class="mt-4 w-full glass text-white py-2 rounded-lg font-bold">Add to Cart</button></div></div>`; });
         }
 
-        window.toggleCart = () => {
-            const modal = document.getElementById('cart-modal');
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
-        }
+        const handleLogin = () => signInWithPopup(auth, provider).catch(e => showToast(e.message, "error"));
+        document.getElementById('login-btn').addEventListener('click', handleLogin);
+        document.getElementById('mobile-login-btn').addEventListener('click', () => { if(currentUser) showSection('admin-section'); else handleLogin(); });
+        document.getElementById('logout-btn').addEventListener('click', () => { signOut(auth); showToast("Logged out"); });
 
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const adminNavBtn = document.getElementById('admin-nav-btn');
-        const userAvatar = document.getElementById('user-avatar');
-        const userEmail = document.getElementById('user-email');
-
-        loginBtn.addEventListener('click', () => signInWithPopup(auth, provider).catch(e => alert(e.message)));
-        logoutBtn.addEventListener('click', () => signOut(auth).then(() => { showSection('home-section'); cart = []; updateCartUI(); }));
-
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             currentUser = user;
-            if (user) {
-                loginBtn.classList.add('hidden');
-                logoutBtn.classList.remove('hidden');
-                adminNavBtn.classList.remove('hidden');
-                
-                // Update Dashboard Profile Info
-                userAvatar.src = user.photoURL || '';
-                userAvatar.classList.remove('hidden');
-                userEmail.innerText = user.email;
+            if(user){
+                document.getElementById('login-btn').classList.add('hidden'); document.getElementById('user-menu').classList.remove('hidden'); document.getElementById('user-avatar').src = user.photoURL;
+                document.getElementById('mobile-user-text').innerText = "Profile";
+                const adminDoc = await getDoc(doc(db, "admins", user.uid));
+                if(adminDoc.exists()){ isAdmin = true; document.getElementById('admin-nav-btn').classList.remove('hidden'); loadAdminData(); }
             } else {
-                loginBtn.classList.remove('hidden');
-                logoutBtn.classList.add('hidden');
-                adminNavBtn.classList.add('hidden');
-                userAvatar.classList.add('hidden');
-                userEmail.innerText = '';
-                showSection('home-section');
+                document.getElementById('login-btn').classList.remove('hidden'); document.getElementById('user-menu').classList.add('hidden'); document.getElementById('admin-nav-btn').classList.add('hidden');
+                document.getElementById('mobile-user-text').innerText = "Login"; isAdmin = false; showSection('home-section');
             }
-            renderProducts(); 
         });
 
-        const productsCol = collection(db, "products");
-        onSnapshot(productsCol, (snapshot) => {
-            allProducts = [];
-            snapshot.forEach((docSnap) => {
-                const p = docSnap.data();
-                p.id = docSnap.id;
-                allProducts.push(p);
-            });
-            renderProducts();
+        onSnapshot(collection(db, "products"), { includeMetadataChanges: true }, (snapshot) => {
+            allProducts = []; snapshot.forEach(docSnap => { const p = docSnap.data(); p.id = docSnap.id; allProducts.push(p); });
+            renderProducts(getFilteredProducts()); renderAdminProducts(); updateStats(); updateCounts();
         });
 
-        function renderProducts() {
-            const productContainer = document.getElementById('product-container');
-            const adminList = document.getElementById('admin-product-list');
-            
-            productContainer.innerHTML = '';
-            adminList.innerHTML = '';
-
-            if(allProducts.length === 0) {
-                productContainer.innerHTML = '<p class="col-span-full text-center text-gray-400 text-lg">New collections arriving soon!</p>';
-            }
-
-            allProducts.forEach((p) => {
-                const safeName = p.name.replace(/'/g, "\\'");
-
-                // 1. Render all products on Home Page
-                productContainer.innerHTML += `
-                    <div class="glass rounded-2xl overflow-hidden flex flex-col group relative">
-                        <div class="overflow-hidden h-64 relative">
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition z-10"></div>
-                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col justify-between relative z-20">
-                            <div>
-                                <h3 class="text-xl font-bold text-white mb-1 drop-shadow-md">${p.name}</h3>
-                                <p class="text-blue-400 font-extrabold text-2xl">৳${p.price}</p>
-                            </div>
-                            <button onclick="addToCart(event, '${p.id}', '${safeName}', ${p.price}, '${p.image}')" 
-                                    class="mt-5 w-full glass hover:bg-white/20 text-white py-3 rounded-xl transition flex justify-center items-center gap-2 font-bold border border-white/20">
-                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                // 2. Render ONLY current user's products on Dashboard
-                if (currentUser && p.userId === currentUser.uid) {
-                    adminList.innerHTML += `
-                        <tr class="hover:bg-white/5 transition border-b border-white/5">
-                            <td class="py-3 pl-2"><img src="${p.image}" class="h-14 w-14 rounded-lg object-cover border border-white/20"></td>
-                            <td class="py-3 text-white font-medium">${p.name}</td>
-                            <td class="py-3 text-blue-300 font-bold">৳${p.price}</td>
-                            <td class="py-3 text-right pr-2">
-                                <button onclick="editProduct('${p.id}', '${safeName}', ${p.price}, '${p.image}')" class="text-blue-400 hover:text-blue-300 mr-4 p-2 glass rounded-lg"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteProduct('${p.id}')" class="text-red-400 hover:text-red-300 p-2 glass rounded-lg border-red-500/30"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                }
+        function loadAdminData() {
+            if(!isAdmin) return;
+            onSnapshot(collection(db, "orders"), (snapshot) => {
+                allOrders = []; snapshot.forEach(docSnap => { const o = docSnap.data(); o.id = docSnap.id; allOrders.push(o); });
+                renderOrders(); updateStats();
             });
-
-            if (currentUser && adminList.innerHTML === '') {
-                adminList.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-400">You haven\'t added any products yet.</td></tr>';
-            }
+        }
+        function updateStats() {
+            if(!isAdmin) return; let rev = 0, pending = 0; allOrders.forEach(o => { if(o.status !== 'Cancelled') rev += Number(o.total); if(o.status === 'Pending') pending++; });
+            document.getElementById('stat-revenue').innerText = `৳${rev}`; document.getElementById('stat-orders').innerText = allOrders.length; document.getElementById('stat-pending').innerText = pending; document.getElementById('stat-products').innerText = allProducts.length;
         }
 
-        const form = document.getElementById('product-form');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!currentUser) return alert("Please login first!");
+        function getFilteredProducts() {
+            let term = document.getElementById('search-bar').value.toLowerCase(), cat = document.getElementById('filter-category').value;
+            let filtered = allProducts.filter(p => p.name.toLowerCase().includes(term));
+            if(cat !== 'All') filtered = filtered.filter(p => p.category === cat);
+            return filtered;
+        }
+        document.getElementById('search-bar').addEventListener('input', () => renderProducts(getFilteredProducts()));
+        document.getElementById('filter-category').addEventListener('change', () => renderProducts(getFilteredProducts()));
 
-            const id = document.getElementById('edit-id').value;
-            const name = document.getElementById('p-name').value;
-            const price = Number(document.getElementById('p-price').value);
-            const image = document.getElementById('p-image').value;
-            const btn = form.querySelector('button');
-            const ogText = btn.innerText;
-            btn.innerText = "Saving...";
+        function renderProducts(products) {
+            const container = document.getElementById('product-container');
+            if(products.length === 0) return container.innerHTML = '<p class="col-span-full text-center text-gray-400 py-10">No jerseys found.</p>';
+            container.innerHTML = '';
+            products.forEach(p => {
+                const finalP = p.discount > 0 ? (p.price - p.discount) : p.price;
+                const badge = p.discount > 0 ? `<div class="absolute top-3 left-3 bg-red-500 shadow-lg text-white text-[10px] font-bold px-2 py-1 rounded z-20">SAVE ৳${p.discount}</div>` : '';
+                container.innerHTML += `
+                    <div class="glass rounded-2xl overflow-hidden flex flex-col group relative transition-transform hover:-translate-y-2 duration-300">
+                        ${badge}
+                        <button onclick="toggleWishlist(event, '${p.id}')" class="absolute top-3 right-3 z-20 text-${wishlist.includes(p.id)?'pink-500':'white/50'} bg-black/20 p-2 rounded-full hover:bg-black/50 backdrop-blur-md transition"><i class="fa-solid fa-heart"></i></button>
+                        <div class="overflow-hidden h-64 relative cursor-pointer" onclick="openQuickView('${p.id}')"><img src="${p.image}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition"><span class="glass px-4 py-2 rounded-full text-white font-bold backdrop-blur-md"><i class="fa-solid fa-eye mr-2"></i>Quick View</span></div></div>
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div><p class="text-xs text-blue-400 font-bold uppercase mb-1">${p.category}</p><h3 class="text-xl font-bold text-white line-clamp-1 mb-1">${p.name}</h3><div class="flex gap-2 items-center"><p class="text-blue-400 font-extrabold text-2xl">৳${finalP}</p>${p.discount>0?`<p class="line-through text-gray-500 text-sm">৳${p.price}</p>`:''}</div></div>
+                            ${p.stock>0 ? `<button onclick="addToCart(event, '${p.id}', '${p.name.replace(/'/g, "\\'")}', ${finalP}, '${p.image}')" class="mt-4 w-full bg-white/5 hover:bg-blue-600 border border-white/10 text-white py-3 rounded-xl font-bold transition duration-300"><i class="fa-solid fa-cart-plus mr-2"></i>Add to Cart</button>` : `<button disabled class="mt-4 w-full bg-gray-800 text-gray-500 py-3 rounded-xl font-bold cursor-not-allowed">Sold Out</button>`}
+                        </div>
+                    </div>`;
+            });
+        }
 
-            try {
-                if (id) {
-                    await updateDoc(doc(db, "products", id), { name, price, image });
-                } else {
-                    // Added UID here for Ownership
-                    await addDoc(productsCol, { name, price, image, userId: currentUser.uid });
-                }
-                form.reset();
-                document.getElementById('edit-id').value = '';
-            } catch (error) { alert("Error: " + error.message); }
-            btn.innerText = ogText;
-        });
-
-        window.editProduct = (id, name, price, image) => {
-            document.getElementById('edit-id').value = id;
-            document.getElementById('p-name').value = name;
-            document.getElementById('p-price').value = price;
-            document.getElementById('p-image').value = image;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.addToCart = (e, id, name, price, image) => {
+            const ex = cart.find(i => i.id === id); if(ex) ex.qty++; else cart.push({ id, name, price, image, qty: 1 });
+            localStorage.setItem('jerseyCart', JSON.stringify(cart)); updateCartUI(); updateCounts(); showToast(`Added to cart!`);
         };
-
-        window.deleteProduct = async (id) => {
-            if(confirm("Are you sure you want to delete your jersey?")) await deleteDoc(doc(db, "products", id));
-        };
-
-        window.addToCart = (event, id, name, price, image) => {
-            const existing = cart.find(item => item.id === id);
-            if(existing) existing.qty++;
-            else cart.push({ id, name, price, image, qty: 1 });
-            updateCartUI();
-            
-            const btn = event.currentTarget;
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Added';
-            btn.classList.add('bg-green-500/40', 'border-green-400/50', 'text-green-300');
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.classList.remove('bg-green-500/40', 'border-green-400/50', 'text-green-300');
-            }, 1000);
-        };
-
-        window.removeFromCart = (id) => {
-            cart = cart.filter(item => item.id !== id);
-            updateCartUI();
-        };
+        window.updateQty = (id, amt) => { const it = cart.find(i => i.id === id); if(it){ it.qty += amt; if(it.qty<=0) cart = cart.filter(i=>i.id!==id); localStorage.setItem('jerseyCart', JSON.stringify(cart)); updateCartUI(); updateCounts(); } };
+        
+        function updateCounts() {
+            let c = 0; cart.forEach(i => c += i.qty);
+            document.getElementById('cart-count-desktop').innerText = c; document.getElementById('cart-count-mobile').innerText = c;
+            document.getElementById('wishlist-count-desktop').innerText = wishlist.length; document.getElementById('wishlist-count-mobile').innerText = wishlist.length;
+        }
 
         function updateCartUI() {
-            const cartItems = document.getElementById('cart-items');
-            cartItems.innerHTML = '';
-            let total = 0, count = 0;
-
-            cart.forEach(item => {
-                total += item.price * item.qty;
-                count += item.qty;
-                cartItems.innerHTML += `
-                    <div class="glass flex items-center gap-4 p-3 rounded-xl border border-white/10">
-                        <img src="${item.image}" class="h-16 w-16 object-cover rounded-lg">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-white text-sm line-clamp-1">${item.name}</h4>
-                            <p class="text-blue-300 text-sm font-semibold mt-1">৳${item.price} <span class="text-gray-400 font-normal">x ${item.qty}</span></p>
-                        </div>
-                        <button onclick="removeFromCart('${item.id}')" class="text-red-400 hover:bg-red-500/20 p-2 rounded-lg transition border border-transparent hover:border-red-500/30">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                `;
+            const div = document.getElementById('cart-items'); div.innerHTML = ''; let subtotal = 0;
+            cart.forEach(i => { subtotal += i.price * i.qty;
+                div.innerHTML += `<div class="glass flex items-center gap-4 p-3 rounded-xl border border-white/10"><img src="${i.image}" loading="lazy" class="h-16 w-16 object-cover rounded-lg"><div class="flex-1"><h4 class="font-bold text-white text-sm line-clamp-2 leading-tight">${i.name}</h4><p class="text-blue-400 font-bold text-sm mt-1">৳${i.price}</p><div class="flex items-center gap-3 mt-2"><button onclick="updateQty('${i.id}', -1)" class="text-gray-400 hover:text-white px-2 py-1 bg-white/5 rounded text-xs"><i class="fa-solid fa-minus"></i></button><span class="text-white text-sm font-semibold">${i.qty}</span><button onclick="updateQty('${i.id}', 1)" class="text-gray-400 hover:text-white px-2 py-1 bg-white/5 rounded text-xs"><i class="fa-solid fa-plus"></i></button></div></div></div>`;
             });
+            if(cart.length===0) {
+                div.innerHTML = '<div class="text-center py-10"><p class="text-gray-500">Cart is empty</p></div>';
+                discountApplied = 0; document.getElementById('discount-row').classList.add('hidden');
+            }
+            let finalTotal = Math.max(0, subtotal - discountApplied);
+            document.getElementById('cart-total').innerText = `৳${subtotal}`; 
+            document.getElementById('checkout-total').innerText = `৳${finalTotal}`;
+        } updateCartUI(); updateCounts();
 
-            if (cart.length === 0) cartItems.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-cart-shopping text-4xl text-gray-500 mb-3 block"></i><p class="text-gray-400">Your cart is empty.</p></div>';
-            
-            document.getElementById('cart-total').innerText = `৳${total}`;
-            document.getElementById('cart-count').innerText = count;
+        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = e.target.querySelector('button'); btn.innerText = "Processing...";
+            let finalTotal = document.getElementById('checkout-total').innerText.replace('৳', '');
+            try {
+                await addDoc(collection(db, "orders"), { customerId: currentUser.uid, customerEmail: currentUser.email, name: document.getElementById('c-name').value, phone: document.getElementById('c-phone').value, address: document.getElementById('c-address').value, paymentMethod: document.getElementById('c-payment').value, discountApplied: discountApplied, items: cart, total: finalTotal, status: 'Pending', timestamp: serverTimestamp() });
+                cart = []; localStorage.setItem('jerseyCart', JSON.stringify(cart)); discountApplied = 0; document.getElementById('discount-row').classList.add('hidden'); updateCartUI(); updateCounts(); closeCheckout(); e.target.reset(); showToast("Order Placed Successfully!");
+            } catch (err) { showToast(err.message, "error"); } btn.innerText = "Confirm Order";
+        });
+
+        function renderAdminProducts() {
+            const list = document.getElementById('admin-product-list'); list.innerHTML = '';
+            allProducts.forEach(p => { list.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="py-2 flex items-center gap-3"><img src="${p.image}" loading="lazy" class="h-10 w-10 rounded object-cover"><div class="text-sm"><p class="text-white line-clamp-1">${p.name}</p></div></td><td class="py-2 text-sm ${p.stock>5?'text-green-400':'text-red-400'}">${p.stock}</td><td class="py-2 text-sm text-blue-300">৳${p.price}</td><td class="py-2 text-right"><button onclick="editProduct('${p.id}', '${p.name.replace(/'/g, "\\'")}', '${p.category}', ${p.price}, ${p.discount||0}, ${p.stock||0}, '${p.image}')" class="text-blue-400 p-2"><i class="fa-solid fa-pen"></i></button><button onclick="deleteProduct('${p.id}')" class="text-red-400 p-2"><i class="fa-solid fa-trash"></i></button></td></tr>`; });
         }
+        function renderOrders() {
+            const list = document.getElementById('admin-order-list'); list.innerHTML = '';
+            allOrders.sort((a,b)=>b.timestamp-a.timestamp).forEach(o => {
+                const d = o.timestamp ? new Date(o.timestamp.toDate()).toLocaleDateString() : 'N/A';
+                list.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="py-3 text-xs"><p class="text-gray-400">${o.id.substring(0,6)}</p><p class="text-white">${d}</p></td><td class="py-3 text-xs"><p class="text-white font-bold">${o.name}</p><p class="text-gray-400">${o.phone}</p></td><td class="py-3 text-sm text-blue-300 font-bold">৳${o.total}</td><td class="py-3 text-right"><select onchange="updateOrderStatus('${o.id}', this.value)" class="glass-input !p-1 text-xs !bg-gray-800 w-auto"><option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option><option value="Confirmed" ${o.status==='Confirmed'?'selected':''}>Confirmed</option><option value="Shipped" ${o.status==='Shipped'?'selected':''}>Shipped</option><option value="Delivered" ${o.status==='Delivered'?'selected':''}>Delivered</option><option value="Cancelled" ${o.status==='Cancelled'?'selected':''}>Cancelled</option></select></td></tr>`;
+            });
+        }
+        window.updateOrderStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); showToast(`Order updated to ${status}`); };
+        document.getElementById('product-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); if(!isAdmin) return;
+            const id = document.getElementById('edit-id').value, name = document.getElementById('p-name').value, category = document.getElementById('p-category').value, price = Number(document.getElementById('p-price').value), discount = Number(document.getElementById('p-discount').value), stock = Number(document.getElementById('p-stock').value), image = document.getElementById('p-image').value;
+            const btn = e.target.querySelector('button'); btn.innerText = "Saving...";
+            try { if(id) await updateDoc(doc(db, "products", id), { name, category, price, discount, stock, image }); else await addDoc(collection(db, "products"), { name, category, price, discount, stock, image }); e.target.reset(); document.getElementById('edit-id').value = ''; showToast("Saved"); } catch (err) { showToast(err.message, "error"); } btn.innerText = "Save Product";
+        });
+        window.editProduct = (id, n, c, p, d, s, i) => { document.getElementById('edit-id').value = id; document.getElementById('p-name').value = n; document.getElementById('p-category').value = c; document.getElementById('p-price').value = p; document.getElementById('p-discount').value = d; document.getElementById('p-stock').value = s; document.getElementById('p-image').value = i; showToast("Edit above"); };
+        window.deleteProduct = async (id) => { if(isAdmin && confirm("Delete?")) { await deleteDoc(doc(db, "products", id)); showToast("Deleted", "error"); } };
     </script>
 </body>
 </html>
